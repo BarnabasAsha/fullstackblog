@@ -15,7 +15,7 @@ const postSchema = mongoose.Schema({
   },
   url: {
     type: String,
-    required: [true, 'Post must have an author']
+    required: [true, 'Post must have a url']
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
