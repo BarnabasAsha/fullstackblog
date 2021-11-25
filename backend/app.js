@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require('cors')
 const logger = require('./utils/logger')
 const config = require('./utils/config')
 require('express-async-errors')
@@ -15,7 +16,7 @@ mongoose.connect(config.MONGO_URI).then(result => {
   logger.info('Connected to mongo')
 }).catch(error => logger.error('Error connecting to mongo:', error.message))
 
-app.use(middleware.tokenHandler)
+app.use(cors())
 app.use(express.json())
 
 app.get('/', (req, res) => {
@@ -25,6 +26,11 @@ app.get('/', (req, res) => {
 app.use('/api/posts', middleware.userExtractor, postRouter)
 app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
+
+if (process.env.NODE_ENV === 'test') {
+  const testingRouter = require('./controllers/testing')
+  app.use('/api/testing', testingRouter)
+}
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

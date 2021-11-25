@@ -25,12 +25,16 @@ postRouter.delete('/:id', async (request, response) => {
   const id = request.params.id
   const user = request.user
   const post = await Post.findById(id)
-
+  if(!post) {
+    return response.status(404).json({
+      error: 'This post does not exist'
+    })
+  }
   if(user._id.toString() === post.user.toString()) {
     await Post.findByIdAndRemove(id)
     response.status(204).end()
   } else {
-    response.status(401).json({
+    return response.status(401).json({
       error: 'Unauthorized operation'
     })
   }
