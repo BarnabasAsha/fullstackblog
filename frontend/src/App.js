@@ -6,7 +6,7 @@ import { setToken } from './services/postservice'
 
 function App() {
   const [user, setUser] = useState(null)
-
+  // handle logout
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
